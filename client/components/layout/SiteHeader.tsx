@@ -23,7 +23,7 @@ export function SiteHeader() {
         <div className="flex items-center gap-2">
           {!isHome && (
             <Link to="/" className="hidden sm:block">
-              <Button variant="ghost" className="gap-2"><Waves className="size-4" />Live Demo</Button>
+              <Button variant="ghost" className="gap-2"><LineChart className="size-4" />Live Demo</Button>
             </Link>
           )}
           <a href="#contact">

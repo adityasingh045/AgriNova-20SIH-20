@@ -55,7 +55,7 @@ export default function Index() {
             </p>
             <div className="flex flex-wrap items-center gap-3">
               <a href="#contact"><Button className="gap-2"><Activity className="size-4" /> Request Demo</Button></a>
-              <a href="/insights"><Button variant="outline" className="gap-2"><Waves className="size-4" /> Explore Insights</Button></a>
+              <a href="/insights"><Button variant="outline" className="gap-2"><LineChart className="size-4" /> Explore Insights</Button></a>
             </div>
             <p className="sr-only">{exampleFromServer}</p>
           </div>

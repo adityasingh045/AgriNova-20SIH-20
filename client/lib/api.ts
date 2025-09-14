@@ -1,6 +1,14 @@
-import type { ImageAnalysisRequest, ImageAnalysisResult, NDVITimeseries, SensorReading } from "@shared/api";
+import type {
+  ImageAnalysisRequest,
+  ImageAnalysisResult,
+  NDVITimeseries,
+  SensorReading,
+} from "@shared/api";
 
-export function connectSensorStream(fieldId = "field-a", onData: (r: SensorReading) => void) {
+export function connectSensorStream(
+  fieldId = "field-a",
+  onData: (r: SensorReading) => void,
+) {
   const url = `/api/sensors/stream?fieldId=${encodeURIComponent(fieldId)}`;
   const es = new EventSource(url);
   es.onmessage = (e) => {
@@ -15,12 +23,16 @@ export function connectSensorStream(fieldId = "field-a", onData: (r: SensorReadi
 }
 
 export async function fetchNDVI(fieldId = "field-a"): Promise<NDVITimeseries> {
-  const res = await fetch(`/api/fields/${encodeURIComponent(fieldId)}/ndvi?points=12`);
+  const res = await fetch(
+    `/api/fields/${encodeURIComponent(fieldId)}/ndvi?points=12`,
+  );
   if (!res.ok) throw new Error("Failed to fetch NDVI");
   return (await res.json()) as NDVITimeseries;
 }
 
-export async function analyzeImage(req: ImageAnalysisRequest): Promise<ImageAnalysisResult> {
+export async function analyzeImage(
+  req: ImageAnalysisRequest,
+): Promise<ImageAnalysisResult> {
   const res = await fetch("/api/images/analyze", {
     method: "POST",
     headers: { "Content-Type": "application/json" },

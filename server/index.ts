@@ -2,8 +2,17 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import { handleDemo } from "./routes/demo";
-import { ingestReading, getLatestReading, streamReadings, health as sensorsHealth } from "./routes/sensors";
-import { getNDVI, analyzeImage, serviceHealth as analyticsHealth } from "./routes/analytics";
+import {
+  ingestReading,
+  getLatestReading,
+  streamReadings,
+  health as sensorsHealth,
+} from "./routes/sensors";
+import {
+  getNDVI,
+  analyzeImage,
+  serviceHealth as analyticsHealth,
+} from "./routes/analytics";
 
 export function createServer() {
   const app = express();

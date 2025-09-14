@@ -17,7 +17,10 @@ export function ImageAnalyzer() {
       const dataUrl = reader.result as string;
       setPreview(dataUrl);
       try {
-        const r = await analyzeImage({ imageData: dataUrl, fieldId: "field-a" });
+        const r = await analyzeImage({
+          imageData: dataUrl,
+          fieldId: "field-a",
+        });
         setResult(r);
       } catch (e) {
         setError((e as Error).message);
@@ -34,17 +37,30 @@ export function ImageAnalyzer() {
         <p className="text-sm text-muted-foreground">Quick Image Analysis</p>
         <div className="space-x-2">
           <label className="inline-block">
-            <input type="file" accept="image/*;capture=camera" className="hidden" onChange={(e) => e.target.files && onFile(e.target.files[0])} />
-            <Button asChild variant="secondary"><span>Upload/Capture</span></Button>
+            <input
+              type="file"
+              accept="image/*;capture=camera"
+              className="hidden"
+              onChange={(e) => e.target.files && onFile(e.target.files[0])}
+            />
+            <Button asChild variant="secondary">
+              <span>Upload/Capture</span>
+            </Button>
           </label>
         </div>
       </div>
       <div className="grid md:grid-cols-2 gap-4">
         <div className="aspect-video rounded-md overflow-hidden bg-muted flex items-center justify-center">
           {preview ? (
-            <img src={preview} alt="preview" className="w-full h-full object-cover" />
+            <img
+              src={preview}
+              alt="preview"
+              className="w-full h-full object-cover"
+            />
           ) : (
-            <span className="text-sm text-muted-foreground">No image selected</span>
+            <span className="text-sm text-muted-foreground">
+              No image selected
+            </span>
           )}
         </div>
         <div className="text-sm">
@@ -52,18 +68,38 @@ export function ImageAnalyzer() {
           {error && <p className="text-destructive">{error}</p>}
           {result && (
             <div className="space-y-1">
-              <p><span className="font-medium">Health Score:</span> {(result.healthScore * 100).toFixed(0)}%</p>
-              <p><span className="font-medium">NDVI mean:</span> {result.ndviMean.toFixed(2)}</p>
-              <p><span className="font-medium">NDRE mean:</span> {result.ndreMean.toFixed(2)}</p>
-              <p><span className="font-medium">Stress areas:</span> {result.stressAreas}</p>
-              <p><span className="font-medium">Pest risk:</span> {result.pestRisk}</p>
+              <p>
+                <span className="font-medium">Health Score:</span>{" "}
+                {(result.healthScore * 100).toFixed(0)}%
+              </p>
+              <p>
+                <span className="font-medium">NDVI mean:</span>{" "}
+                {result.ndviMean.toFixed(2)}
+              </p>
+              <p>
+                <span className="font-medium">NDRE mean:</span>{" "}
+                {result.ndreMean.toFixed(2)}
+              </p>
+              <p>
+                <span className="font-medium">Stress areas:</span>{" "}
+                {result.stressAreas}
+              </p>
+              <p>
+                <span className="font-medium">Pest risk:</span>{" "}
+                {result.pestRisk}
+              </p>
               <ul className="list-disc pl-5 text-muted-foreground">
-                {result.notes.map((n, i) => (<li key={i}>{n}</li>))}
+                {result.notes.map((n, i) => (
+                  <li key={i}>{n}</li>
+                ))}
               </ul>
             </div>
           )}
           {!result && !loading && (
-            <p className="text-muted-foreground">Upload a drone or field image to compute NDVI/NDRE and get a quick health and pest risk assessment.</p>
+            <p className="text-muted-foreground">
+              Upload a drone or field image to compute NDVI/NDRE and get a quick
+              health and pest risk assessment.
+            </p>
           )}
         </div>
       </div>

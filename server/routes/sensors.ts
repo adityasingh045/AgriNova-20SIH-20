@@ -17,14 +17,17 @@ function clamp(n: number, min: number, max: number) {
 export const ingestReading: RequestHandler = (req, res) => {
   const body = req.body as Partial<SensorReading>;
   if (!body.sensorId || !body.fieldId || typeof body.moistureKpa !== "number") {
-    return res.status(400).json({ error: "sensorId, fieldId and moistureKpa are required" });
+    return res
+      .status(400)
+      .json({ error: "sensorId, fieldId and moistureKpa are required" });
   }
   const reading: SensorReading = {
     sensorId: body.sensorId,
     fieldId: body.fieldId,
     timestamp: body.timestamp ?? Date.now(),
     moistureKpa: body.moistureKpa,
-    temperatureC: typeof body.temperatureC === "number" ? body.temperatureC : 22,
+    temperatureC:
+      typeof body.temperatureC === "number" ? body.temperatureC : 22,
     humidityPct: typeof body.humidityPct === "number" ? body.humidityPct : 55,
   };
   readings.push(reading);
@@ -48,7 +51,9 @@ export const streamReadings: RequestHandler = (req, res) => {
   res.flushHeaders?.();
 
   // Start with a baseline using seeded randomness per field
-  const rand = seeded(fieldId.split("").reduce((a, c) => a + c.charCodeAt(0), 0));
+  const rand = seeded(
+    fieldId.split("").reduce((a, c) => a + c.charCodeAt(0), 0),
+  );
   let last: SensorReading = {
     sensorId: `sensor-${fieldId}-1`,
     fieldId,

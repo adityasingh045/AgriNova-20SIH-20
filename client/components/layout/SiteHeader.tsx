@@ -1,7 +1,7 @@
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Leaf, Activity, Waves } from "lucide-react";
+import { Leaf, Activity, LineChart } from "lucide-react";
 
 export function SiteHeader() {
   const location = useLocation();

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { DemoResponse } from "@shared/api";
 import { Button } from "@/components/ui/button";
-import { Activity, Leaf, Waves, Radar, Droplets, Bug, Satellite } from "lucide-react";
+import { Activity, Leaf, LineChart, Radar, Droplets, Bug, Satellite } from "lucide-react";
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, Area, AreaChart } from "recharts";
 
 export default function Index() {

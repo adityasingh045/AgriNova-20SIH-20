@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
-import { DemoResponse } from "@shared/api";
+import { useEffect, useState, useMemo } from "react";
+import { DemoResponse, NDVITimeseries, SensorReading } from "@shared/api";
 import { Button } from "@/components/ui/button";
 import { Activity, Leaf, LineChart as LineChartIcon, Radar, Droplets, Bug, Satellite } from "lucide-react";
 import { ResponsiveContainer, LineChart as RLineChart, Line, XAxis, YAxis, Tooltip, Area, AreaChart as RAreaChart } from "recharts";
+import { connectSensorStream, fetchNDVI } from "@/lib/api";
+import { ImageAnalyzer } from "@/components/ImageAnalyzer";
 
 export default function Index() {
   const [exampleFromServer, setExampleFromServer] = useState("");
@@ -19,23 +21,31 @@ export default function Index() {
     }
   };
 
-  const ndviData = [
-    { t: "Apr", v: 0.42 },
-    { t: "May", v: 0.55 },
-    { t: "Jun", v: 0.68 },
-    { t: "Jul", v: 0.73 },
-    { t: "Aug", v: 0.70 },
-    { t: "Sep", v: 0.65 },
-  ];
+  const [ndvi, setNdvi] = useState<NDVITimeseries | null>(null);
+  const [moisture, setMoisture] = useState<{ t: number; v: number }[]>([]);
 
-  const moistureData = [
-    { t: 0, v: 18 },
-    { t: 2, v: 22 },
-    { t: 4, v: 27 },
-    { t: 6, v: 31 },
-    { t: 8, v: 29 },
-    { t: 10, v: 24 },
-  ];
+  useEffect(() => {
+    // NDVI
+    fetchNDVI("field-a").then(setNdvi).catch(console.error);
+
+    // Live sensor stream
+    const disconnect = connectSensorStream("field-a", (r: SensorReading) => {
+      setMoisture((prev) => {
+        const next = [...prev, { t: r.timestamp, v: r.moistureKpa }];
+        // keep last 30 points
+        return next.slice(Math.max(0, next.length - 30));
+      });
+    });
+    return disconnect;
+  }, []);
+
+  const ndviData = ndvi?.points ?? [];
+  const moistureData = useMemo(() => {
+    if (moisture.length === 0) return [] as { t: number; v: number }[];
+    const base = moisture[0]?.t ?? Date.now();
+    // Normalize timestamps to seconds since base for chart readability
+    return moisture.map((m) => ({ t: Math.round((m.t - base) / 1000), v: m.v }));
+  }, [moisture]);
 
   return (
     <div className="relative">
@@ -122,8 +132,8 @@ export default function Index() {
       </section>
 
       <section className="container mx-auto px-4 pb-24">
-        <div className="grid lg:grid-cols-2 gap-10 items-center rounded-2xl border p-6 md:p-10 bg-card">
-          <div className="space-y-4">
+        <div className="grid lg:grid-cols-2 gap-10 items-start">
+          <div className="space-y-4 rounded-2xl border p-6 md:p-10 bg-card">
             <h2 className="text-2xl md:text-3xl font-bold">Explainable AI that farmers trust</h2>
             <p className="text-muted-foreground">Every alert includes the spectral drivers, sensor corroboration, and recommended actions. Users can trace back to raw tiles and telemetry for full transparency.</p>
             <div className="flex gap-3">
@@ -131,11 +141,7 @@ export default function Index() {
               <a href="/insights"><Button variant="outline">See examples</Button></a>
             </div>
           </div>
-          <div className="grid grid-cols-6 gap-1">
-            {Array.from({ length: 60 }).map((_, i) => (
-              <div key={i} className="aspect-square rounded-sm" style={{ background: i % 7 === 0 ? "hsl(var(--destructive)/0.25)" : i % 5 === 0 ? "hsl(var(--accent)/0.25)" : "hsl(var(--primary)/0.25)" }} />
-            ))}
-          </div>
+          <ImageAnalyzer />
         </div>
       </section>
     </div>

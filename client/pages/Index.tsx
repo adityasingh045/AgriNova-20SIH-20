@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { DemoResponse } from "@shared/api";
 import { Button } from "@/components/ui/button";
-import { Activity, Leaf, LineChart, Radar, Droplets, Bug, Satellite } from "lucide-react";
-import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, Area, AreaChart } from "recharts";
+import { Activity, Leaf, LineChart as LineChartIcon, Radar, Droplets, Bug, Satellite } from "lucide-react";
+import { ResponsiveContainer, LineChart as RLineChart, Line, XAxis, YAxis, Tooltip, Area, AreaChart as RAreaChart } from "recharts";
 
 export default function Index() {
   const [exampleFromServer, setExampleFromServer] = useState("");
@@ -55,7 +55,7 @@ export default function Index() {
             </p>
             <div className="flex flex-wrap items-center gap-3">
               <a href="#contact"><Button className="gap-2"><Activity className="size-4" /> Request Demo</Button></a>
-              <a href="/insights"><Button variant="outline" className="gap-2"><LineChart className="size-4" /> Explore Insights</Button></a>
+              <a href="/insights"><Button variant="outline" className="gap-2"><LineChartIcon className="size-4" /> Explore Insights</Button></a>
             </div>
             <p className="sr-only">{exampleFromServer}</p>
           </div>
@@ -70,13 +70,13 @@ export default function Index() {
               </div>
               <div className="h-48">
                 <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={ndviData} margin={{ left: 0, right: 0, top: 10, bottom: 0 }}>
+                  <RLineChart data={ndviData} margin={{ left: 0, right: 0, top: 10, bottom: 0 }}>
                     <XAxis dataKey="t" axisLine={false} tickLine={false} tick={{ fill: "hsl(var(--muted-foreground))" }} />
                     <YAxis domain={[0, 1]} ticks={[0, 0.25, 0.5, 0.75, 1]} axisLine={false} tickLine={false} tick={{ fill: "hsl(var(--muted-foreground))" }} />
                     <Tooltip contentStyle={{ background: "hsl(var(--popover))", border: "1px solid hsl(var(--border))" }} labelStyle={{ color: "hsl(var(--foreground))" }} />
                     <Area type="monotone" dataKey="v" stroke="hsl(var(--primary))" fill="hsl(var(--primary)/0.2)" />
                     <Line type="monotone" dataKey="v" strokeWidth={2.5} stroke="hsl(var(--primary))" dot={false} />
-                  </LineChart>
+                  </RLineChart>
                 </ResponsiveContainer>
               </div>
             </div>
@@ -88,11 +88,11 @@ export default function Index() {
                 </div>
                 <div className="h-32">
                   <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart data={moistureData} margin={{ left: 0, right: 0, top: 10, bottom: 0 }}>
+                    <RAreaChart data={moistureData} margin={{ left: 0, right: 0, top: 10, bottom: 0 }}>
                       <XAxis dataKey="t" hide />
                       <YAxis hide />
                       <Area type="monotone" dataKey="v" stroke="hsl(var(--accent))" fill="hsl(var(--accent)/0.2)" />
-                    </AreaChart>
+                    </RAreaChart>
                   </ResponsiveContainer>
                 </div>
               </div>
